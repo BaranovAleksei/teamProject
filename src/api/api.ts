@@ -2,8 +2,8 @@ import axios from 'axios'
 import {CardPackType} from "../redux/packReducer";
 
 const instance = axios.create({
-    baseURL: 'https://neko-back.herokuapp.com/2.0/', //heroku
-    // baseURL: 'http://localhost:7542/2.0/',  //local
+    // baseURL: 'https://neko-back.herokuapp.com/2.0/', //heroku
+    baseURL: 'http://localhost:7542/2.0/',  //local
     withCredentials: true,
     headers: {}
 })
@@ -36,12 +36,14 @@ export const API = {
         return instance.post<NewPassResponseType> ('auth/set-new-password', {password, resetPasswordToken})
           .then(response => { return response.data })
     }
+
 }
+
 //API for PACS
 export const APIpack = {
     getCardPacks:( pageNumber: number = 1, name: string = '', ) => {
         return instance.get<GetCardPacksResponseType>(`cards/pack?packName${name}&page=${pageNumber}&pageCount=10 `)
-          .then(res => res.data)
+            .then(res => res.data)
     },
     addPack: () => {
         return instance.post<any>(`cards/pack`, {
@@ -51,11 +53,11 @@ export const APIpack = {
                 private: false
             }
         })
-          .then(res => res.data)
+            .then(res => res.data)
     },
     deletePack: (id: string) => {
         return instance.delete<any>(`cards/pack?id=${id}`)
-          .then(res => res.data)
+            .then(res => res.data)
     },
     updatePack: (idPack: string) => {
         return instance.put<any>(`cards/pack`, {
@@ -65,12 +67,17 @@ export const APIpack = {
                 deckCover: ""
             }
         })
-          .then(res => res.data)
+            .then(res => res.data)
+    },
+
+    getCards: (packId: string) => {
+        return instance.get(`cards/card?cardsPack_id=${packId}`)
+            .then(res => {
+                return res
+            })
     }
 }
 //API for CARDS
-
-
 
 
 
