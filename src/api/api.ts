@@ -70,12 +70,22 @@ export const APIpack = {
             .then(res => res.data)
     },
 
-    getCards: (packId: string) => {
-        return instance.get(`cards/card?cardsPack_id=${packId}`)
+    getCards: (packId: string, page: number = 1) => {
+        return instance.get(`cards/card?cardsPack_id=${packId}&page=${page}`)
             .then(res => {
                 return res
             })
-    }
+    },
+    addCard: (packId: string, question: string = 'no question',answer: string = 'no answer' ) => {
+        return instance.post(`cards/card`, {card:{cardsPack_id: packId, question, answer}}).then(res => {
+            return res
+        })
+    },
+    updateCard: (cardId: string, question: string = 'no question',answer: string = 'no answer' ) => {
+        return instance.put(`cards/card`, {card:{_id: cardId, question, answer}}).then(res => {
+            return res
+        })
+    },
 }
 //API for CARDS
 

@@ -1,14 +1,17 @@
 import {Dispatch} from "redux";
 import {APIpack} from "../api/api";
+import {change_statusAC} from './appReducer'
 
 
 export enum ACTIONS_TYPE {
     SET_CARD_PACKS = 'packsReducer/SET_CARD_PACKS',
     SET_PAGE_COUNT = 'packsReducer/SET_PAGE_COUNT',
     SET_PACKS_TOTAL_COUNT = 'packsReducer/SET_PACKS_TOTAL_COUNT',
+    SET_CURRENT_PAGE = 'packsReducer/SET_CURRENT_PAGE',
     ADD_NEW_PACKS_CARD = 'packReducer/ADD_NEW_PACKS_CARD',
     DELETE_PACK_CARD = 'packReducer/DELETE_PACK_CARD',
-    UPDATE_PACK_CARD = 'packReducer/UPDATE_PACK_CARD'
+    UPDATE_PACK_CARD = 'packReducer/UPDATE_PACK_CARD',
+    MY_PACKS = 'packReducer/MY_PACKS',
 }
 
 const initialState = {
@@ -39,6 +42,8 @@ export const packsReducer = (state: InitialStateType = initialState, action: Act
                 ...state,
                 cardPacksTotalCount: action.value
             }
+        case ACTIONS_TYPE.SET_CURRENT_PAGE:
+                return {...state, page: action.value}
         case ACTIONS_TYPE.ADD_NEW_PACKS_CARD:
             return {...state,
                 cardPacks: [ action.card, ...state.cardPacks]}
@@ -47,6 +52,11 @@ export const packsReducer = (state: InitialStateType = initialState, action: Act
                 cardPacks: [...state.cardPacks.filter(pack => pack._id !== action.idCard)]}
         case ACTIONS_TYPE.UPDATE_PACK_CARD:
             return {...state}
+        // case ACTIONS_TYPE.MY_PACKS:
+        //     return {
+        //         ...state,
+        //         cardPacks: [...state.cardPacks.filter(c => c.user_id === action.id)]
+        //     }
         default:
             return state
     }
@@ -59,6 +69,7 @@ export const setCardPacksAC = (packs: Array<CardPackType>) => ({
 export const setCardPacksPageCountAC = (value: number) => ({type: ACTIONS_TYPE.SET_PAGE_COUNT, value} as const)
 
 export const setCardPacksTotalCountAC = (value: number) => ({type: ACTIONS_TYPE.SET_PACKS_TOTAL_COUNT, value} as const)
+export const setCurrentPage = (value: number) => ({type: ACTIONS_TYPE.SET_CURRENT_PAGE, value} as const)
 //add packs
 export const addNewCardsPackAC = (card: CardPackType) => ({ type: ACTIONS_TYPE.ADD_NEW_PACKS_CARD, card} as  const)
 //delete pack
@@ -66,36 +77,50 @@ export const deleteCardPackAC = (idCard: string) => ({type: ACTIONS_TYPE.DELETE_
 //update pack
 export const updateCardPackAC = (idCard: string, newName: string) => ({type: ACTIONS_TYPE.UPDATE_PACK_CARD,
     idCard, newName} as const)
+export const sortedMyPacks = (id: string) => ({type: ACTIONS_TYPE.MY_PACKS, id} as const)
 
 //thunks get all cards
 export const getCardPacksTC = (pageNumber?: number, pageCount?: number, userID?: string) => (dispatch: Dispatch) => {
+    dispatch(change_statusAC('loading'))
     APIpack.getCardPacks(pageNumber).then(res => {
         dispatch(setCardPacksAC(res.cardPacks))
         dispatch(setCardPacksPageCountAC(res.pageCount))
         dispatch(setCardPacksTotalCountAC(res.cardPacksTotalCount))
+        pageNumber &&  dispatch(setCurrentPage(pageNumber))
+        dispatch(change_statusAC('success'))
     })
 }
 //thunk add new PacksCards
 export const addNewCardPackTC = () => (dispatch: Dispatch) => {
     APIpack.addPack()
       .then(res => {
+          dispatch(change_statusAC('loading'))
           dispatch(addNewCardsPackAC(res.newCardsPack))
-          getCardPacksTC()
+          APIpack.getCardPacks()
+              .then(res => {
+                  dispatch(setCardPacksAC(res.cardPacks))
+                  dispatch(change_statusAC('success'))
+              })
+
       })
 }
 //thunk for delete Pack
 export const deleteCardPackTC = (idPack: string) => (dispatch: Dispatch) => {
+    dispatch(change_statusAC('loading'))
     APIpack.deletePack(idPack)
       .then(res => {
           dispatch( deleteCardPackAC(idPack))
-          getCardPacksTC()
+          // getCardPacksTC()
+          dispatch(change_statusAC('success'))
       })
 }
 //thunk for update Pack
 export const updateCardPackTC = (idPack: string, newName: string) => (dispatch: Dispatch) => {
     APIpack.updatePack(idPack)
       .then(res => {
+          dispatch(change_statusAC('loading'))
           dispatch(updateCardPackAC( idPack, newName))
+          dispatch(change_statusAC('success'))
       })
 }
 
@@ -105,9 +130,11 @@ export type ActionsType =
     | ReturnType<typeof setCardPacksAC>
     | ReturnType<typeof setCardPacksPageCountAC>
     | ReturnType<typeof setCardPacksTotalCountAC>
+    | ReturnType<typeof setCurrentPage>
     | ReturnType<typeof addNewCardsPackAC>
     | ReturnType<typeof deleteCardPackAC>
     | ReturnType<typeof updateCardPackAC>
+    | ReturnType<typeof sortedMyPacks>
 
 export type CardPackType = {
     _id: string
