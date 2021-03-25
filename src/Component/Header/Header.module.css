@@ -44,3 +44,23 @@
 .nav .items .item:hover a.activeLink {
     color: #3a33d1;
 }
+
+.container {
+    width: 1584px;
+    padding: 0 0 0 167px;
+}
+
+.container-product-body {
+    width: 1382px;
+    background: #cccccc;
+    margin-top: -80px;
+    margin-left: 28px;
+}
+
+.index-production-wrapper {
+    display: flex;
+}
+
+.navigation-sidebar-left {
+    flex: 0 0 250px;
+}

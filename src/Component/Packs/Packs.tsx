@@ -8,15 +8,14 @@ import {
     deleteCardPackTC,
     getCardPacksTC,
     sortedMyPacks,
+    sortedMyPacks,
     updateCardPackTC
 } from '../../redux/packReducer'
-import {Button} from 'antd'
+import {Button, Form, Input} from 'antd'
 import {PaginationComp} from '../Pagination/Pagination'
 import {Redirect} from 'react-router-dom'
 import {DeleteTwoTone, EditTwoTone, FolderAddOutlined} from '@ant-design/icons'
 import {getCardsTC, setPackId} from '../../redux/cardsReducer'
-import {Loading} from '../Loading/loading'
-
 
 export const Packs = () => {
     const status = useSelector<AppRootStateType, string>(state => state.app.status)
@@ -25,8 +24,6 @@ export const Packs = () => {
     const cardPacksTotalCount = useSelector<AppRootStateType, number>(state => state.pack.cardPacksTotalCount)
     const cardPacks = useSelector<AppRootStateType, Array<CardPackType>>(state => state.pack.cardPacks)
     const idUser = useSelector<AppRootStateType, string>(state => state.profile.profile ? state.profile.profile?._id : '')
-    const isLoggedIn = useSelector<AppRootStateType, boolean>(state => state.login.isLoggedIn)
-    const currentPage = useSelector<AppRootStateType, number>(state => state.pack.page)
 
     const onChangePage = (pageNumber: number) => {
         dispatch(getCardPacksTC(pageNumber))
@@ -64,36 +61,26 @@ export const Packs = () => {
 
 
     return (
+        <div>
         <div className={s.container}>
-            {status === 'loading' && <Loading/>}
-            <div className={s.header}>
-                <div className={s.mainHeaderInfo}>
-                    <p>Name</p>
-                    <p>cardsCount</p>
-                </div>
-                <div className={s.descr}>
-                    <p>updated</p>
-                    <p>userId</p>
-                    <p>packId</p>
-                </div>
 
-                <div className={s.buttons}>
-                    <Button type='default' shape={'circle'} style={{marginRight: '5px'}} onClick={sortPacks}>my</Button>
+                <div className={s.header}>
+                    <p>Name</p>
+                    <p style={{marginRight: '120px'}}>cardsCount</p>
+                    <p>updated</p>
+                    <Button type='default' style={{marginRight: '5px'}}>myPacks</Button>
                     <Button type='default'
                             style={{marginRight: '5px'}}
                             shape={'circle'}
                             icon={<FolderAddOutlined/>}
                             onClick={addNewPacks}/>
                 </div>
-
-            </div>
-
-            {cardPacks.map((k, i) => <div key={i} className={s.wrapper}>
-                <div onClick={() => {
-                    dispatch(setPackId(k._id))
-                    dispatch(getCardsTC(k._id))
-                    setCards(!cards)
-                }} className={s.cardPacksWrapper}>
+                {cardPacks.map((k, i) => <div key={i} className={s.cardPacksWrapper}
+                                              onClick={() => {
+                                                  dispatch(setPackId(k._id))
+                                                  dispatch(getCardsTC(k._id))
+                                                  setCards(!cards)
+                                              }}>
                     <div className={s.mainInfo}>
                         <span>{k.name}</span>
                         <span>{k.cardsCount}</span>
@@ -102,24 +89,38 @@ export const Packs = () => {
                     <span className={s.card}>{k.updated}</span>
                     <span className={s.card}>UserId: {k.user_id}</span>
                     <span className={s.card}>PackId: {k._id}</span>
-                </div>
+                    <div className={s.buttons}>
+                        {idUser === k.user_id && <Button type='default'
+                                                         style={{marginRight: '5px'}}
+                                                         shape={'circle'}
+                                                         onClick={() => updateOfPack(k._id)}
+                                                         icon={<EditTwoTone/>}/>}
+                        {idUser === k.user_id && <Button type="default"
+                                                         onClick={() => deleteOfPack(k._id)}
+                                                         style={{marginRight: '5px'}}
+                                                         shape={'circle'}
+                                                         icon={<DeleteTwoTone/>}/>}
+                        <Button type='default'
+                                style={{marginRight: '5px'}}
+                                shape={'circle'}
+                                icon={<FolderOpenOutlined/>}/>
+                    </div>
 
-                <div className={s.buttons}>
-                    {idUser === k.user_id && <Button type='default'
-                                                     style={{marginRight: '5px'}}
-                                                     shape={'circle'}
-                                                     onClick={() => updateOfPack(k._id)}
-                                                     icon={<EditTwoTone/>}/>}
-                    {idUser === k.user_id && <Button type="default"
-                                                     onClick={() => deleteOfPack(k._id)}
-                                                     style={{marginRight: '5px'}}
-                                                     shape={'circle'}
-                                                     icon={<DeleteTwoTone/>}/>}
-                </div>
-
-            </div>)}
-            <PaginationComp totalItemCount={cardPacksTotalCount} onChangePage={onChangePage} currentPage={currentPage}/>
+                </div>)}
+                <PaginationComp totalItemCount={cardPacksTotalCount} onChangePage={onChangePage}/>
 
         </div>
+
+            <button onClick={() => setModalActive(true)} className={s.modalButton}> Click me</button>
+            <Modal active={modalActive} setActive={setModalActive}>
+                <Form style={{padding: '50px'}} {...layout} name="basic">
+                    <Input className={s.inputText} />
+                    <Input className={s.inputText} />
+                    <Input className={s.inputText}  />
+                    <button onClick={() => setModalActive(false)} className={s.modalButtonSubmit} style={{width: '20vw', display: 'block'}}>submit</button>
+                </Form>
+            </Modal>
+        </div>
+
     )
 }
