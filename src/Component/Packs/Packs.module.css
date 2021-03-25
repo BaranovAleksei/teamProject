@@ -1,5 +1,6 @@
 .container {
-    margin: 100px auto;
+    margin: 0 auto;
+    padding-top: 100px;
     max-width: 1100px;
 }
 
@@ -9,19 +10,37 @@
     padding: 20px;
     /*border: 1px solid grey;*/
     background: #ff9c6e;
+    font-weight: 600;
 }
-
+.descr {
+    display: flex;
+    width: 70%;
+    justify-content: space-around;
+}
+.mainHeaderInfo {
+    width: 20%;
+    display: flex;
+    justify-content: space-between;
+}
+.wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 10px;
+    background: #fff2e8;
+}
 .cardPacksWrapper {
+    width: 90%;
     margin: 10px 0;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    list-style: none;
-    background: #fff2e8;
-    padding: 0 10px;
+    /*list-style: none;*/
+
+
 }
 .mainInfo {
-    width: 10%;
+    width:20%;
     display: flex;
     justify-content: space-between;
 }
@@ -38,7 +57,7 @@
     display: flex;
     justify-content: flex-end;
     align-items: center;
-    width: 10%;
+    /*width: 10%;*/
 }
 .buttonsWrapper {
     display: flex;

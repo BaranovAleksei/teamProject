@@ -1,5 +1,6 @@
 .cards {
-    margin: 100px auto;
+    margin: 0 auto;
+    padding-top: 100px;
     max-width: 900px;
 }
 .header {
@@ -53,8 +54,9 @@
     z-index: 100;
 }
 .addCard {
-    width: 300px;
-    height: 300px;
+    padding: 50px;
+    width: 450px;
+    border-radius: 20px;
     background-color: #fff;
     margin: 130px auto;
     display: flex;

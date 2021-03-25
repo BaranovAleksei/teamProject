@@ -7,6 +7,7 @@ import {
     CardPackType,
     deleteCardPackTC,
     getCardPacksTC,
+    sortedMyPacks,
     updateCardPackTC
 } from '../../redux/packReducer'
 import {Button} from 'antd'
@@ -17,7 +18,6 @@ import {getCardsTC, setPackId} from '../../redux/cardsReducer'
 import {Loading} from '../Loading/loading'
 
 
-
 export const Packs = () => {
     const status = useSelector<AppRootStateType, string>(state => state.app.status)
     const dispatch = useDispatch()
@@ -26,6 +26,7 @@ export const Packs = () => {
     const cardPacks = useSelector<AppRootStateType, Array<CardPackType>>(state => state.pack.cardPacks)
     const idUser = useSelector<AppRootStateType, string>(state => state.profile.profile ? state.profile.profile?._id : '')
     const isLoggedIn = useSelector<AppRootStateType, boolean>(state => state.login.isLoggedIn)
+    const currentPage = useSelector<AppRootStateType, number>(state => state.pack.page)
 
     const onChangePage = (pageNumber: number) => {
         dispatch(getCardPacksTC(pageNumber))
@@ -42,9 +43,12 @@ export const Packs = () => {
         dispatch(deleteCardPackTC(idPack))
     }
     const updateOfPack = (idPack: string, newName: string = 'best of the best') => {
+        setCards(false)
         dispatch(updateCardPackTC(idPack, newName))
     }
+    const sortPacks = () => {
 
+    }
 
     if (!isLoggedIn) {
         return <Redirect to={'/login'}/>
@@ -58,37 +62,48 @@ export const Packs = () => {
         />
     }
 
-    if (status==='loading'){
-        return <Loading/>
-    }
 
     return (
         <div className={s.container}>
-
+            {status === 'loading' && <Loading/>}
             <div className={s.header}>
-                <p>Name</p>
-                <p style={{marginRight: '120px'}}>cardsCount</p>
-                <p>updated</p>
-                <Button type='default' style={{marginRight: '5px'}}>myPacks</Button>
-                <Button type='default'
-                        style={{marginRight: '5px'}}
-                        shape={'circle'}
-                        icon={<FolderAddOutlined/>}
-                        onClick={addNewPacks}/>
-            </div>
-            {cardPacks.map((k, i) => <div key={i} className={s.cardPacksWrapper}  onClick={() => {
-                dispatch(setPackId(k._id))
-                dispatch(getCardsTC(k._id))
-                setCards(!cards)
-            }}>
-                <div className={s.mainInfo}>
-                    <span>{k.name}</span>
-                    <span>{k.cardsCount}</span>
+                <div className={s.mainHeaderInfo}>
+                    <p>Name</p>
+                    <p>cardsCount</p>
+                </div>
+                <div className={s.descr}>
+                    <p>updated</p>
+                    <p>userId</p>
+                    <p>packId</p>
                 </div>
 
-                <span className={s.card}>{k.updated}</span>
-                <span className={s.card}>UserId: {k.user_id}</span>
-                <span className={s.card}>PackId: {k._id}</span>
+                <div className={s.buttons}>
+                    <Button type='default' shape={'circle'} style={{marginRight: '5px'}} onClick={sortPacks}>my</Button>
+                    <Button type='default'
+                            style={{marginRight: '5px'}}
+                            shape={'circle'}
+                            icon={<FolderAddOutlined/>}
+                            onClick={addNewPacks}/>
+                </div>
+
+            </div>
+
+            {cardPacks.map((k, i) => <div key={i} className={s.wrapper}>
+                <div onClick={() => {
+                    dispatch(setPackId(k._id))
+                    dispatch(getCardsTC(k._id))
+                    setCards(!cards)
+                }} className={s.cardPacksWrapper}>
+                    <div className={s.mainInfo}>
+                        <span>{k.name}</span>
+                        <span>{k.cardsCount}</span>
+                    </div>
+
+                    <span className={s.card}>{k.updated}</span>
+                    <span className={s.card}>UserId: {k.user_id}</span>
+                    <span className={s.card}>PackId: {k._id}</span>
+                </div>
+
                 <div className={s.buttons}>
                     {idUser === k.user_id && <Button type='default'
                                                      style={{marginRight: '5px'}}
@@ -103,7 +118,7 @@ export const Packs = () => {
                 </div>
 
             </div>)}
-            <PaginationComp totalItemCount={cardPacksTotalCount} onChangePage={onChangePage}/>
+            <PaginationComp totalItemCount={cardPacksTotalCount} onChangePage={onChangePage} currentPage={currentPage}/>
 
         </div>
     )
