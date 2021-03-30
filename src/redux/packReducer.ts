@@ -82,7 +82,7 @@ export const sortedMyPacks = (id: string) => ({type: ACTIONS_TYPE.MY_PACKS, id} 
 //thunks get all cards
 export const getCardPacksTC = (pageNumber?: number, pageCount?: number, userID?: string) => (dispatch: Dispatch) => {
     dispatch(change_statusAC('loading'))
-    APIpack.getCardPacks(pageNumber).then(res => {
+    APIpack.getCardPacks(pageNumber, pageCount, userID ).then(res => {
         dispatch(setCardPacksAC(res.cardPacks))
         dispatch(setCardPacksPageCountAC(res.pageCount))
         dispatch(setCardPacksTotalCountAC(res.cardPacksTotalCount))

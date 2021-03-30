@@ -101,12 +101,8 @@ import {stat} from 'fs'
 // 	</Grid>
 // }
 
-
-
-
 export const Login = () => {
 	const dispatch = useDispatch()
-
 
 	const isLoggedIn = useSelector<AppRootStateType, boolean>(state => state.login.isLoggedIn)
 		if(isLoggedIn) {
@@ -115,7 +111,6 @@ export const Login = () => {
 	const onFinish = (values: any) => {
 		dispatch(loginTC({email:values.email, password:values.password, rememberMe: values.rememberMe}))
 	};
-
 
 	return (
 		<Form
@@ -126,14 +121,14 @@ export const Login = () => {
 		>
 			<Form.Item
 				name="email"
-				initialValue={'nya-admin@nya.nya'}
+				initialValue={'baranov.sys@gmail.com'}
 				rules={[{ required: true, message: 'Please input your Username!' }]}
 			>
 				<Input prefix={<UserOutlined className="site-form-item-icon" />} placeholder="Username" />
 			</Form.Item>
 			<Form.Item
 				name="password"
-				initialValue={'1qazxcvBG'}
+				initialValue={'123456789'}
 				rules={[{ required: true, message: 'Please input your Password!' }]}
 			>
 				<Input
@@ -148,7 +143,7 @@ export const Login = () => {
 				</Form.Item>
 
 				<a className="login-form-forgot" href="">
-					Forgot password
+					<NavLink to = {'/pass-recovery'}>Forgot password</NavLink>
 				</a>
 			</Form.Item>
 
