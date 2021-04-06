@@ -1,47 +1,28 @@
-import React from 'react'
-import s from './NewPassword.module.css'
+import React, {useState} from 'react'
+import s from './NewPassword.module.sass'
 import {Button, Form, Input} from "antd"
-import {newPassTC, setErrorNewPass} from '../../../redux/forgotReducer'
-import {useDispatch, useSelector} from "react-redux"
-import { useHistory } from "react-router-dom"
-import {AppRootStateType} from "../../../redux/store";
 
-export const NewPassword = () => {
+export type NewPasswordType = {
+	error: string
+	infoNewPass: string
+	onFinish: (values: any) => void
+	onFinishFailed: (errorInfo: any) => void
+}
+// type LayuotType = Parameters<typeof Form>[0]['layout']
 
-	const dispatch = useDispatch()
-	const error = useSelector<AppRootStateType, string>(state => state.passRec.errorNewPass)
-	const infoNewPass = useSelector<AppRootStateType, string>(state => state.passRec.infoNewPass)
+export const NewPassword: React.FC<NewPasswordType> = (props) => {
 
-	const history = useHistory()
+	const formLayoutHorizontal = 'vertical'
 
-	const resetPasswordToken = history.location.pathname.slice(10, history.location.pathname.length)
-	// alert (resetPasswordToken)
-
-	const layout = {
-		labelCol: {span: 8},
-		wrapperCol: {span: 16},
-	}
-
-	const onFinish = (values: any) => {
-		dispatch( newPassTC(values.newPassword1, resetPasswordToken) )
-		setTimeout(() => {
-			dispatch(setErrorNewPass(''))
-		}, 5000)
-	}
-
-	const onFinishFailed = (errorInfo: any) => {
-		console.log('Failed:', errorInfo)
-	}
-
-	return (
-		<div className={s.newPassOverlay}>
-			<span className={s.spanText}>{infoNewPass}</span>
-			<Form  {...layout} name="basic"
+	return <div className={s.newPassOverlay}>
+			<Form  layout={formLayoutHorizontal}
+				   name="basic"
 			       initialValues={{remember: true}}
-			       onFinish={onFinish}
-			       onFinishFailed={onFinishFailed}>
-
-				<Form.Item label="new password: " name="newPassword1" hasFeedback
+			       onFinish={props.onFinish}
+			       onFinishFailed={props.onFinishFailed} >
+				<span className={s.spanText}>{props.infoNewPass}</span>
+				<Form.Item label="new password: "
+						   name="newPassword1" hasFeedback
 				           rules={[
 					           {required: true, message: 'Please input your password!'},
 					           ({getFieldValue}) => ({
@@ -55,8 +36,8 @@ export const NewPassword = () => {
 					           }),]}>
 					<Input.Password/>
 				</Form.Item>
-
-				<Form.Item label="repeat password: " name="newPassword2"  hasFeedback
+				<Form.Item label="repeat password: "
+						   name="newPassword2" hasFeedback
 				           rules={[
 					           {
 						           required: true,
@@ -71,14 +52,11 @@ export const NewPassword = () => {
 							           return Promise.reject(new Error('Two passwords do not match!'))
 						           },
 					           }),
-				           ]}>
+				           ]} >
 					<Input.Password/>
 				</Form.Item>
-
 				<Button type="primary" htmlType="submit">change password</Button>
-
 			</Form>
-			<div>{error}</div>
+			<div>{props.error}</div>
 		</div>
-	)
 }

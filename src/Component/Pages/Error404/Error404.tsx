@@ -1,22 +1,14 @@
 import React from 'react'
-import s from './Error404.module.css'
+import s from './Error404.module.sass'
 
-export const Error404 = () => {
+export type Error404Type = {
+
+}
+
+export const Error404: React.FC<Error404Type> = () => {
 	return (
 		<div className={s.errorOverlay}>
-			page 404
-			page 404
-			page 404
-			page 404
-			page 404
-			page 404
-			page 404
-			page 404
-			page 404
-			page 404
-			page 404
-			page 404
-
+			page not found
 		</div>
 	)
 }

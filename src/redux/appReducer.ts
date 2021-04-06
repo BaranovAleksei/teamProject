@@ -7,11 +7,14 @@ export enum ACTIONS_TYPE {
 }
 type StatusType = 'idle' | 'loading' | 'success' | 'failed'
 const initialState = {
-    isInitialized: false,
+    isInitialized: false ,
     status: 'idle' as StatusType,
 }
 
-type InitialStateType = typeof initialState
+type InitialStateType = {
+    isInitialized: boolean
+    status: StatusType
+}
 
 export const appReducer = (state: InitialStateType = initialState, action: ActionsType): InitialStateType => {
     switch (action.type) {
@@ -30,6 +33,7 @@ export const change_statusAC = (value: StatusType) => ({type: ACTIONS_TYPE.CHANG
 export const initializeAppTC = () => (dispatch: Dispatch) => {
     API.authMe()
         .then(res => {
+            debugger
             dispatch(isInitializedAC(true))
     })
 }

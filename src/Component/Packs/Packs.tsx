@@ -75,7 +75,6 @@ export const Packs = () => {
                   <p>userId</p>
                   <p>packId</p>
               </div>
-
               <div className={s.buttons}>
                   <Button type='default'
                           shape={'circle'}
@@ -91,7 +90,6 @@ export const Packs = () => {
                           icon={<FolderAddOutlined/>}
                           onClick={addNewPacks}/>
               </div>
-
           </div>
 
           {cardPacks.map((k, i) => <div key={i} className={s.wrapper}>
@@ -104,7 +102,6 @@ export const Packs = () => {
                       <span>{k.name}</span>
                       <span>{k.cardsCount}</span>
                   </div>
-
                   <span className={s.card}>{k.updated}</span>
                   <span className={s.card}>UserId: {k.user_id}</span>
                   <span className={s.card}>PackId: {k._id}</span>
@@ -122,10 +119,8 @@ export const Packs = () => {
                                                    shape={'circle'}
                                                    icon={<DeleteTwoTone/>}/>}
               </div>
-
           </div>)}
           <PaginationComp totalItemCount={cardPacksTotalCount} onChangePage={onChangePage} currentPage={currentPage}/>
-
       </div>
     )
 }

@@ -35,14 +35,12 @@ export const loginTC = (data: AuthLoginType) => (dispatch: Dispatch) => {
     dispatch(change_statusAC('loading'))
     API.login(data.email, data.password, data.rememberMe)
         .then(res => {
-
             dispatch(setIsLoggedInAC(true))
             dispatch(setIsLogin(true))
             dispatch(isInitializedAC(true))
             dispatch(setProfileAC(res))
             initializeAppTC()
             dispatch(change_statusAC('success'))
-
         })
         .catch(err => {
             dispatch(change_statusAC('failed'))

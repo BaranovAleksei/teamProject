@@ -2,7 +2,6 @@ import {Dispatch} from "redux";
 import {APIpack} from "../api/api";
 import {change_statusAC} from './appReducer'
 
-
 export enum ACTIONS_TYPE {
     SET_CARD_PACKS = 'packsReducer/SET_CARD_PACKS',
     SET_PAGE_COUNT = 'packsReducer/SET_PAGE_COUNT',
@@ -23,7 +22,6 @@ const initialState = {
     pageCount: 10,
 }
 type InitialStateType = typeof initialState
-
 
 export const packsReducer = (state: InitialStateType = initialState, action: ActionsType): InitialStateType => {
     switch (action.type) {

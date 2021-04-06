@@ -4,13 +4,13 @@ import Routes from './Component/Routes/Routes'
 import Header from './Component/Header/Header'
 import {useDispatch, useSelector} from 'react-redux'
 import {AppRootStateType} from './redux/store'
-import {Login} from "./Component/Pages/Login/Login";
-import {initializeAppTC} from "./redux/appReducer";
-
+import {initializeAppTC} from "./redux/appReducer"
+import {LoginContainer} from "./Component/Pages/Login/LoginContainer";
 
 function App() {
   const dispatch = useDispatch()
-  const isInit = useSelector<AppRootStateType, boolean>( state => state.app.isInitialized)
+  const isInit = useSelector<AppRootStateType, boolean | null>( state => state.app.isInitialized)
+
   useEffect( () => {
     dispatch(initializeAppTC())
   }, [dispatch])
@@ -18,7 +18,7 @@ function App() {
   return (
         <div>
             <Header/>
-            {isInit ? <Routes/> : <Login />}
+            { isInit ? <Routes/> : <LoginContainer />}
         </div>
     )
 }
