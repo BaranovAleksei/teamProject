@@ -25,5 +25,5 @@ export const ProfileContainer = () => {
 	}
 
 	return <Profile myProfile = { myProfile }
-									logout = {logout} />
+					logout = {logout} />
 }

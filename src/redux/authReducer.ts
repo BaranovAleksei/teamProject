@@ -28,22 +28,22 @@ export const authReducer = (state: InitialStateType = initialState, action: Acti
 	}
 }
 
-export const setIsLogin = (value: boolean) => ({type: ACTIONS_TYPE.SET_IS_LOGIN, value} as const)
-export const setIsUserID = (userID: string) => ({type: ACTIONS_TYPE.SET_USER_ID, userID} as const)
-export const setError = (error: string) => ({type: ACTIONS_TYPE.SET_ERROR, error} as const)
+export const setIsLoginAC = (value: boolean) => ({type: ACTIONS_TYPE.SET_IS_LOGIN, value} as const)
+export const setIsUserIDAC = (userID: string) => ({type: ACTIONS_TYPE.SET_USER_ID, userID} as const)
+export const setErrorAC = (error: string) => ({type: ACTIONS_TYPE.SET_ERROR, error} as const)
 
 // thunks
 export const setRegistration = (data: RegistrationPostDataType) => (dispatch: Dispatch) => {
 	API.registration(data.email, data.password)
 		.then(res => {
-			dispatch(setIsLogin(true))
+			dispatch(setIsLoginAC(true))
 		})
 		.catch(err => {
-			dispatch(setError('Email already exists'))
+			dispatch(setErrorAC('Email already exists'))
 		})
 }
 
 // types
-type ActionsType = | ReturnType<typeof setIsLogin>
-									 | ReturnType<typeof setIsUserID>
-									 | ReturnType<typeof setError>
+type ActionsType = | ReturnType<typeof setIsLoginAC>
+									 | ReturnType<typeof setIsUserIDAC>
+									 | ReturnType<typeof setErrorAC>

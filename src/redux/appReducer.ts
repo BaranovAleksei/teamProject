@@ -1,5 +1,6 @@
 import {Dispatch} from 'redux'
 import {API} from "../api/api";
+import {setIsLoginAC} from "./authReducer";
 
 export enum ACTIONS_TYPE {
     SET_INITIALIZED_APP = 'appReducer/SET_INITIALIZED_APP',
@@ -33,8 +34,8 @@ export const change_statusAC = (value: StatusType) => ({type: ACTIONS_TYPE.CHANG
 export const initializeAppTC = () => (dispatch: Dispatch) => {
     API.authMe()
         .then(res => {
-            debugger
             dispatch(isInitializedAC(true))
+            dispatch(setIsLoginAC(true))
     })
 }
 // types

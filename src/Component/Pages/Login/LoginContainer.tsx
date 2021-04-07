@@ -4,10 +4,12 @@ import {loginTC} from "../../../redux/loginReducer"
 import {AppRootStateType} from "../../../redux/store"
 import {Redirect} from 'react-router-dom'
 import {Login} from "./Login"
+import {PATH} from "../../Routes/Routes";
 
-export const LoginContainer = () => {
+const LoginContainer = () => {
 	const dispatch = useDispatch()
 	const isLoggedIn = useSelector<AppRootStateType, boolean>(state => state.login.isLoggedIn)
+  const initialized = useSelector<AppRootStateType, boolean>(state => state.auth.isLogin)
 
 	if(isLoggedIn) {
 		return <Redirect to={'/profile'}/>
@@ -18,5 +20,7 @@ export const LoginContainer = () => {
 	}
 
 	return <Login isLoggedIn = {isLoggedIn}
-				  onFinish = {onFinish}/>
+				        onFinish = {onFinish}/>
 }
+
+export default React.memo(LoginContainer)

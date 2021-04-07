@@ -5,14 +5,15 @@ import Header from './Component/Header/Header'
 import {useDispatch, useSelector} from 'react-redux'
 import {AppRootStateType} from './redux/store'
 import {initializeAppTC} from "./redux/appReducer"
-import {LoginContainer} from "./Component/Pages/Login/LoginContainer";
+import LoginContainer from "./Component/Pages/Login/LoginContainer";
 
 function App() {
   const dispatch = useDispatch()
   const isInit = useSelector<AppRootStateType, boolean | null>( state => state.app.isInitialized)
+  const isLoggedIn = useSelector<AppRootStateType, boolean>(state => state.auth.isLogin)
 
   useEffect( () => {
-    dispatch(initializeAppTC())
+      dispatch(initializeAppTC())
   }, [dispatch])
 
   return (

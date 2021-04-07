@@ -1,7 +1,7 @@
 import React from 'react'
 import {useDispatch, useSelector} from 'react-redux'
 import {AppRootStateType} from '../../../redux/store'
-import {setError, setRegistration} from '../../../redux/authReducer'
+import {setErrorAC, setRegistration} from '../../../redux/authReducer'
 import {Redirect} from 'react-router-dom'
 import {Registration} from "./Registration"
 
@@ -16,7 +16,7 @@ export const RegistrationContainer = () => {
     const onFinish = (values: any) => {
         dispatch(setRegistration({email: values.email, password: values.password1}))
         setTimeout(() => {
-            dispatch(setError(''))
+            dispatch(setErrorAC(''))
         }, 10000)
     }
     const onFinishFailed = (errorInfo: any) => {
