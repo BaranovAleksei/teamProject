@@ -15,7 +15,7 @@ export const API = {
         })
     },
     authMe: () => {
-        return instance.get('auth/me').then(res => {
+        return instance.post('auth/me').then(res => {
             return res.data
         })
     },
@@ -36,13 +36,16 @@ export const API = {
         return instance.post<NewPassResponseType> ('auth/set-new-password', {password, resetPasswordToken})
           .then(response => { return response.data })
     }
-
 }
 
 //API for PACS
 export const APIpack = {
-    getCardPacks:( pageNumber: number = 1, name: string = '', ) => {
-        return instance.get<GetCardPacksResponseType>(`cards/pack?packName${name}&page=${pageNumber}&pageCount=10 `)
+    getCardPacks:( pageNumber: number = 1, pageCount: number = 10, userID?: string) => {
+      if( userID) {
+	      return instance.get<GetCardPacksResponseType>(`cards/pack?user_id=${userID}&page=${pageNumber}&pageCount=${pageCount}`)
+		      .then(res => res.data)
+      }
+    	return instance.get<GetCardPacksResponseType>(`cards/pack?page=${pageNumber}&pageCount=${pageCount}`)
             .then(res => res.data)
     },
     addPack: () => {
@@ -69,7 +72,6 @@ export const APIpack = {
         })
             .then(res => res.data)
     },
-
     getCards: (packId: string, page: number = 1) => {
         return instance.get(`cards/card?cardsPack_id=${packId}&page=${page}`)
             .then(res => {

@@ -1,18 +1,25 @@
-import React from 'react'
+import React, {useEffect} from 'react'
 import './App.css'
-import {HashRouter, Redirect} from 'react-router-dom'
 import Routes from './Component/Routes/Routes'
 import Header from './Component/Header/Header'
-import {useSelector} from 'react-redux'
+import {useDispatch, useSelector} from 'react-redux'
 import {AppRootStateType} from './redux/store'
-
+import {initializeAppTC} from "./redux/appReducer"
+import LoginContainer from "./Component/Pages/Login/LoginContainer";
 
 function App() {
+  const dispatch = useDispatch()
+  const isInit = useSelector<AppRootStateType, boolean | null>( state => state.app.isInitialized)
+  const isLoggedIn = useSelector<AppRootStateType, boolean>(state => state.auth.isLogin)
 
-    return (
+  useEffect( () => {
+      dispatch(initializeAppTC())
+  }, [dispatch])
+
+  return (
         <div>
             <Header/>
-            <Routes/>
+            { isInit ? <Routes/> : <LoginContainer />}
         </div>
     )
 }

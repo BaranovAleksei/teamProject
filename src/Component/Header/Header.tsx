@@ -1,5 +1,5 @@
 import React from 'react'
-import s from './Header.module.css'
+import s from './Header.module.sass'
 import {PATH} from "../Routes/Routes"
 import {NavLink, Redirect} from 'react-router-dom'
 import {useSelector} from 'react-redux'
@@ -13,7 +13,6 @@ function Header() {
 			<button className={ s.menuHover }> Меню </button>
 			<div className={s.items}>
 				{isLogin &&
-
 				<div className={ s.item }>
 					<NavLink to= { PATH.PROFILE } activeClassName = { s.activeLink }>Profile</NavLink>
 				</div>
@@ -27,15 +26,11 @@ function Header() {
 				{!isLogin &&<div className={ s.item }>
 					<NavLink to={ PATH.PASSWORD_RECOVERY } activeClassName = { s.activeLink }>Password recovery</NavLink>
 				</div>}
-				{/*<div className={ s.item }>*/}
-				{/*	<NavLink to={ PATH.NEW_PASSWORD } activeClassName = { s.activeLink }>New password</NavLink>*/}
-				{/*</div>*/}
 				{isLogin &&
 					<div className={ s.item } >
 						<NavLink to={ PATH.PACKS } activeClassName = { s.activeLink }>Packs</NavLink>
 					</div>
 				}
-
 			</div>
 		</div>
 	)

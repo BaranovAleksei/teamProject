@@ -1,49 +1,41 @@
 import React from 'react'
-import s from './Profile.module.css'
-import {useDispatch, useSelector} from 'react-redux'
-import {AppRootStateType} from '../../../redux/store'
-import {NavLink, Redirect} from 'react-router-dom'
+import s from './Profile.module.sass'
+import {NavLink} from 'react-router-dom'
 import {ProfileType} from '../../../redux/profileReducer'
-import {logOutTC} from '../../../redux/loginReducer'
-import {Loading} from '../../Loading/loading'
+import defaultUser from './imgUser.png'
 
-export const Profile = () => {
-    const dispatch = useDispatch()
-    const profile = useSelector<AppRootStateType, ProfileType | null>(state => state.profile.profile)
-    const status = useSelector<AppRootStateType, string>(state => state.app.status)
-    const isLoggedIn = useSelector<AppRootStateType, boolean>(state => state.login.isLoggedIn)
+export type ProfilePageType = {
+	myProfile: ProfileType | null
+	logout: () => void
+}
 
-
-    if (!isLoggedIn) {
-        return <Redirect to={'/login'}/>
-    }
-    const logout = () => {
-    	dispatch(logOutTC())
-	}
-
-    if (status==='loading'){
-        return <Loading/>
-    }
-     return (
-        <div className={s.profileOverlay}>
-            {profile &&
-				<div className={s.profile}>
-					<img src={profile.avatar} alt=""/>
-					<div>
-						name: {profile.name} <br/>
-						token: {profile.token} <br/>
-						_id: {profile._id}<br/>
-						email: {profile.email}<br/>
-						created: {profile.created}<br/>
-						admin: {profile.isAdmin ? 'yes' : 'no'}<br/>
-
-                        <NavLink to="/packs"> Packs</NavLink>
-					</div>
-					<div><button onClick={logout}>Log out</button></div>
-
-				</div>
-
-            }
+export const Profile: React.FC<ProfilePageType> = (props) => {
+	return (
+    <div className={s.profileOverlay}>
+        <div className={s.profile}>
+          <div className={s.myAvatarOverlay}>
+            { props.myProfile?.avatar ? <img src = {props.myProfile?.avatar} alt=""/>
+              : <img src = {defaultUser} alt=""/>}
+          </div>
+          <div className={s.infoUser}>
+            <div className={s.myProInfoOverlay}>
+              name: {props.myProfile?.name} <br/>
+              token: {props.myProfile?.token} <br/>
+              _id: {props.myProfile?._id}<br/>
+              email: {props.myProfile?.email}<br/>
+              created: {props.myProfile?.created}<br/>
+              admin: {props.myProfile?.isAdmin ? 'yes' : 'no'}<br/>
+            </div>
+            <div className={s.myPacksOverlay}>
+              <NavLink to="/packs">
+                <span>Packs</span>
+              </NavLink>
+            </div>
+            <div className={s.logOutOverlay}>
+              <button onClick={props.logout}>Log out</button>
+            </div>
+          </div>
         </div>
+    </div>
     )
 }

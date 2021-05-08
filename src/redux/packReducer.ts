@@ -2,7 +2,6 @@ import {Dispatch} from "redux";
 import {APIpack} from "../api/api";
 import {change_statusAC} from './appReducer'
 
-
 export enum ACTIONS_TYPE {
     SET_CARD_PACKS = 'packsReducer/SET_CARD_PACKS',
     SET_PAGE_COUNT = 'packsReducer/SET_PAGE_COUNT',
@@ -23,7 +22,6 @@ const initialState = {
     pageCount: 10,
 }
 type InitialStateType = typeof initialState
-
 
 export const packsReducer = (state: InitialStateType = initialState, action: ActionsType): InitialStateType => {
     switch (action.type) {
@@ -82,7 +80,7 @@ export const sortedMyPacks = (id: string) => ({type: ACTIONS_TYPE.MY_PACKS, id} 
 //thunks get all cards
 export const getCardPacksTC = (pageNumber?: number, pageCount?: number, userID?: string) => (dispatch: Dispatch) => {
     dispatch(change_statusAC('loading'))
-    APIpack.getCardPacks(pageNumber).then(res => {
+    APIpack.getCardPacks(pageNumber, pageCount, userID ).then(res => {
         dispatch(setCardPacksAC(res.cardPacks))
         dispatch(setCardPacksPageCountAC(res.pageCount))
         dispatch(setCardPacksTotalCountAC(res.cardPacksTotalCount))

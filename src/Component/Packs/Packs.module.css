@@ -8,9 +8,13 @@
     display: flex;
     justify-content: space-between;
     padding: 20px;
-    /*border: 1px solid grey;*/
     background: #ff9c6e;
     font-weight: 600;
+}
+.header p {
+    margin: 0;
+    padding: 0;
+    text-align: center;
 }
 .descr {
     display: flex;
@@ -28,6 +32,7 @@
     align-items: center;
     padding: 0 10px;
     background: #fff2e8;
+    margin: 5px 0;
 }
 .cardPacksWrapper {
     width: 90%;
@@ -35,9 +40,9 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    /*list-style: none;*/
-
-
+}
+.cardPacksWrapper:hover {
+    cursor: pointer;
 }
 .mainInfo {
     width:20%;
@@ -57,7 +62,6 @@
     display: flex;
     justify-content: flex-end;
     align-items: center;
-    /*width: 10%;*/
 }
 .buttonsWrapper {
     display: flex;

@@ -1,42 +1,25 @@
 import React from 'react'
-import s from './Registration.module.css'
-import {useDispatch, useSelector} from 'react-redux'
-import {AppRootStateType} from '../../../redux/store'
-import {setError, setRegistration} from '../../../redux/authReducer'
-import {Redirect} from 'react-router-dom'
+import s from './Registration.module.sass'
 import {Form, Input, Button} from 'antd'
 
+export type LayoutType = {
+    formLayout?: string
+    labelCol?: any
+    wrapperCol?: any
+}
 
-export const Registration = () => {
-    const dispatch = useDispatch()
-    const isRegistered = useSelector<AppRootStateType, boolean>(state => state.auth.isRegistered)
-    const error = useSelector<AppRootStateType, string>(state => state.auth.error)
-    const layout = {
-        labelCol: {span: 8},
-        wrapperCol: {span: 16},
-    }
-    const onFinish = (values: any) => {
-        dispatch(setRegistration({email: values.email, password: values.password1}))
-        setTimeout(() => {
-            dispatch(setError(''))
-        }, 10000)
-    }
+export type RegistrationType = {
+    error: string
+    isLogined: boolean
+    layout: LayoutType
+    onFinish: (values: any) => void
+    onFinishFailed: (errorInfo: any) => void
+}
 
-    const onFinishFailed = (errorInfo: any) => {
-        console.log('Failed:', errorInfo)
-    }
-
-
-    if (isRegistered) {
-        return <Redirect to={'/login'}/>
-    }
-
-    return (
-        <div className={s.registrationOverlay}>
-
-
-            <Form  {...layout} name="basic"  initialValues={{remember: true}} onFinish={onFinish}
-                   onFinishFailed={onFinishFailed}>
+export const Registration: React.FC<RegistrationType> = (props) => {
+    return <div className={s.registrationOverlay}>
+            <Form  {...props.layout} name="basic"  initialValues={{remember: true}} onFinish={props.onFinish}
+                   onFinishFailed={props.onFinishFailed}>
                 <Form.Item label="email" name="email"
                     rules={[
                         {required: true, message: 'Please input your email!'},
@@ -44,7 +27,6 @@ export const Registration = () => {
                     ]}>
                     <Input style={{width: '100%'}} />
                 </Form.Item>
-
                 <Form.Item label="Password1" name="password1" hasFeedback
                            rules={[
                                {required: true, message: 'Please input your password!'},
@@ -60,7 +42,6 @@ export const Registration = () => {
                                }),]}>
                     <Input.Password/>
                 </Form.Item>
-
                 <Form.Item label="Password2" name="password2"  hasFeedback
                     rules={[
                         {
@@ -79,10 +60,8 @@ export const Registration = () => {
                     ]}>
                     <Input.Password/>
                 </Form.Item>
-
                 <Button type="primary" htmlType="submit">Button</Button>
-                <div className={s.serverError}>{error}</div>
+                <div className={s.serverError}>{props.error}</div>
             </Form>
         </div>
-    )
 }
